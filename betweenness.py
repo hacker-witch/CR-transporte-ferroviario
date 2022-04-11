@@ -2,7 +2,7 @@ import pandas as pd
 import networkx as nx
 import plotly.graph_objects as go
 
-edges_df = pd.read_excel('todas-as-linhas/arestas.xlsx')
+edges_df = pd.read_excel('data/arestas.xlsx')
 
 G = nx.from_pandas_edgelist(edges_df, 'Source', 'Target')
 
