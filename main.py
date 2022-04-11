@@ -122,8 +122,8 @@ fig = make_subplots(
     specs=[[{'type': 'table'}, {'type': 'table'}], 
           [{'type': 'table'}, {'type': 'table'}]],
     subplot_titles=[
-        'Proximidade em Ordem Crescente', 'Intermediação em Ordem Crescente',
-        'Proximidade em Ordem Decrescente', 'Intermediação em Ordem Decrescente']
+        'Centralidade de Proximidade em Ordem Crescente', 'Centralidade de Intermediação em Ordem Crescente',
+        'Centralidade de Proximidade em Ordem Decrescente', 'Centralidade de Intermediação em Ordem Decrescente']
 )
 
 fig.add_trace(make_table_from_df(nodes_df_sorted_by_ascending_closeness), row=1, col=1)
