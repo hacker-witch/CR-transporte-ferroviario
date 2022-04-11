@@ -1,6 +1,7 @@
 import pandas as pd
 import networkx as nx
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 edges_df = pd.read_excel('data/arestas.xlsx')
 
@@ -83,5 +84,51 @@ fig = go.Figure(layout=layout)
 
 fig.add_trace(edge_trace)
 fig.add_trace(node_trace)
+
+fig.show()
+
+
+
+# Table
+node_id_list = []
+closeness_list = []
+betweenness_list = []
+for node_id in G.nodes():
+    node = G.nodes[node_id]
+    node_id_list.append(node_id)
+    closeness_list.append(node['closeness'])
+    betweenness_list.append(node['betweenness'])
+
+nodes_df = pd.DataFrame({'Estação': node_id_list, 
+                        'Proximidade': closeness_list, 
+                        'Intermediação': betweenness_list})
+
+nodes_df_sorted_by_ascending_closeness = nodes_df.sort_values(by=['Proximidade', 'Estação']).drop(columns=['Intermediação'])
+nodes_df_sorted_by_ascending_betweenness = nodes_df.sort_values(by=['Intermediação', 'Estação']).drop(columns=['Proximidade'])
+
+nodes_df_sorted_by_descending_closeness = nodes_df.sort_values(by=['Proximidade', 'Estação'], ascending=False).drop(columns=['Intermediação'])
+nodes_df_sorted_by_descending_betweenness = nodes_df.sort_values(by=['Intermediação', 'Estação'], ascending=False).drop(columns=['Proximidade'])
+
+def make_table_from_df(df):
+    table = go.Table(
+        header=dict(values=list(df.columns)),
+        cells=dict(values=[df[col] for col in df.columns])
+    )
+
+    return table
+
+fig = make_subplots(
+    rows=2, cols=2,
+    specs=[[{'type': 'table'}, {'type': 'table'}], 
+          [{'type': 'table'}, {'type': 'table'}]],
+    subplot_titles=[
+        'Proximidade em Ordem Crescente', 'Intermediação em Ordem Crescente',
+        'Proximidade em Ordem Decrescente', 'Intermediação em Ordem Decrescente']
+)
+
+fig.add_trace(make_table_from_df(nodes_df_sorted_by_ascending_closeness), row=1, col=1)
+fig.add_trace(make_table_from_df(nodes_df_sorted_by_ascending_betweenness), row=1, col=2)
+fig.add_trace(make_table_from_df(nodes_df_sorted_by_descending_closeness), row=2, col=1)
+fig.add_trace(make_table_from_df(nodes_df_sorted_by_descending_betweenness), row=2, col=2)
 
 fig.show()
