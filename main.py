@@ -109,7 +109,8 @@ nodes_df_sorted_by_ascending_betweenness = nodes_df.sort_values(by=['Intermedia�
 nodes_df_sorted_by_descending_closeness = nodes_df.sort_values(by=['Proximidade', 'Estação'], ascending=False).drop(columns=['Intermediação'])
 nodes_df_sorted_by_descending_betweenness = nodes_df.sort_values(by=['Intermediação', 'Estação'], ascending=False).drop(columns=['Proximidade'])
 
-def make_table_from_df(df):
+def make_table_from_df(df, amount=5):
+    df = df.head(amount)
     table = go.Table(
         header=dict(values=list(df.columns)),
         cells=dict(values=[df[col] for col in df.columns])
